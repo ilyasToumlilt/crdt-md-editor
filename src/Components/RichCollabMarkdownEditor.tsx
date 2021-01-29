@@ -100,6 +100,7 @@ import {
 } from "../config/demo/richDemoConfig";
 import { MENTIONABLES } from "../config/mentionables";
 import { InputSearchHighlight } from "./Widgets/InputSearchHighlight";
+import useLocalStorageDriver from "./Drivers/LocalStorage/LocalStorageDriver";
 
 export interface RichMDEdProps {
   value?: string; // set a default value (or DEFAULT_VALUE is unbefined)
@@ -108,7 +109,7 @@ export interface RichMDEdProps {
 /**
  * An init value for the demo
  */
-const initialValue: Node[] = [
+const defaultValue: Node[] = [
   ...initialValueBasicMarks,
   ...initialValueHighlight,
   ...initialValueBasicElements,
@@ -197,7 +198,12 @@ export default function RichMDEd(props: RichMDEdProps) {
   const [search, setSearchHighlight] = useState("");
   const decorate = [decorateSearchHighlight({ search })];
 
-  const [value, setValue] = useState<Node[]>(initialValue);
+  //TODO: use driver to select value if available on its local storage
+  const localFirst = localStorage.getItem("content");
+  const initialValue = localFirst !== null ? JSON.parse(localFirst) : defaultValue;
+  const [value, setValue] = useState<Node[]>(
+    initialValue
+  );
   const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
 
   const {
@@ -222,6 +228,11 @@ export default function RichMDEd(props: RichMDEdProps) {
           setValue(newValue as SlateDocument);
 
           onChangeMention(editor);
+
+          //TODO: Drivers should be selected by config props
+          //useLocalStorageDriver(newValue);
+          const content = JSON.stringify(value);
+          localStorage.setItem("content", content);
         }}
       >
         <InputSearchHighlight icon={Search} setSearch={setSearchHighlight} />
