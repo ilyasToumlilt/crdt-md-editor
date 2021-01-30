@@ -100,7 +100,7 @@ import {
 } from "../config/demo/richDemoConfig";
 import { MENTIONABLES } from "../config/mentionables";
 import { InputSearchHighlight } from "./Widgets/InputSearchHighlight";
-import useLocalStorageDriver from "./Drivers/LocalStorage/LocalStorageDriver";
+import { setLocalStorageValue, useLocalStorageDriver } from "./Drivers/LocalStorage/LocalStorageDriver";
 
 export interface RichMDEdProps {
   value?: string; // set a default value (or DEFAULT_VALUE is unbefined)
@@ -198,9 +198,8 @@ export default function RichMDEd(props: RichMDEdProps) {
   const [search, setSearchHighlight] = useState("");
   const decorate = [decorateSearchHighlight({ search })];
 
-  //TODO: use driver to select value if available on its local storage
-  const localFirst = localStorage.getItem("content");
-  const initialValue = localFirst !== null ? JSON.parse(localFirst) : defaultValue;
+  ///use driver to select value if available on its local storage
+  const initialValue = useLocalStorageDriver(defaultValue);
   const [value, setValue] = useState<Node[]>(
     initialValue
   );
@@ -230,9 +229,7 @@ export default function RichMDEd(props: RichMDEdProps) {
           onChangeMention(editor);
 
           //TODO: Drivers should be selected by config props
-          //useLocalStorageDriver(newValue);
-          const content = JSON.stringify(value);
-          localStorage.setItem("content", content);
+          setLocalStorageValue(newValue);
         }}
       >
         <InputSearchHighlight icon={Search} setSearch={setSearchHighlight} />
