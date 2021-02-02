@@ -104,6 +104,7 @@ import {
   setLocalStorageValue,
   useLocalStorageDriver,
 } from "./Drivers/LocalStorage/LocalStorageDriver";
+import randomColor from "randomcolor";
 
 /**
  * An init value for the demo
@@ -194,7 +195,10 @@ const withPlugins = [
 ] as const;
 
 export interface RichMDEdProps {
-  value?: string; // set a default value (or DEFAULT_VALUE is unbefined)
+  defaultValue?: string; // set a default value (or DEFAULT_VALUE is unbefined)
+  clientUsername: string; // a username to display over the cursor
+  clientID: string; // the backend client ID (not sure I'll need this info at app level...)
+  slug: string; // a route API to request
 }
 
 export default function RichMDEd(props: RichMDEdProps) {
@@ -203,7 +207,20 @@ export default function RichMDEd(props: RichMDEdProps) {
 
   ///use driver to select value if available on its local storage
   const initialValue = useLocalStorageDriver(DEFAULT_VALUE);
+  //TODO: implem slate-collab as driver
   const [value, setValue] = useState<Node[]>(initialValue);
+  const [isOnline, setOnlineState] = useState<boolean>(false);
+
+  const color = useMemo(
+    () =>
+      randomColor({
+        luminosity: "dark",
+        format: "rgba",
+        alpha: 1,
+      }),
+    []
+  );
+
   const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
 
   const {
