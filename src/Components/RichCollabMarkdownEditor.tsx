@@ -92,29 +92,28 @@ import { headingTypes } from "../config/types";
 import { autoformatRules } from "../config/autoformatRules";
 import { options, optionsResetBlockTypes } from "../config/defaults";
 import {
-  initialValueList,
-  initialValueBasicElements,
-  initialValueHighlight,
-  initialValueBasicMarks,
-  initialValuePreview,
+  DEFAULT_VALUE_LIST,
+  DEFAULT_VALUE_BASIC_ELEMENTS,
+  DEFAULT_VALUE_HIGHLIGHT,
+  DEFAULT_VALUE_BASIC_MARKS,
+  DEFAULT_VALUE_PREVIEW,
 } from "../config/demo/richDemoConfig";
 import { MENTIONABLES } from "../config/mentionables";
 import { InputSearchHighlight } from "./Widgets/InputSearchHighlight";
-import { setLocalStorageValue, useLocalStorageDriver } from "./Drivers/LocalStorage/LocalStorageDriver";
-
-export interface RichMDEdProps {
-  value?: string; // set a default value (or DEFAULT_VALUE is unbefined)
-}
+import {
+  setLocalStorageValue,
+  useLocalStorageDriver,
+} from "./Drivers/LocalStorage/LocalStorageDriver";
 
 /**
  * An init value for the demo
  */
-const defaultValue: Node[] = [
-  ...initialValueBasicMarks,
-  ...initialValueHighlight,
-  ...initialValueBasicElements,
-  ...initialValueList,
-  ...initialValuePreview,
+const DEFAULT_VALUE: Node[] = [
+  ...DEFAULT_VALUE_BASIC_MARKS,
+  ...DEFAULT_VALUE_HIGHLIGHT,
+  ...DEFAULT_VALUE_BASIC_ELEMENTS,
+  ...DEFAULT_VALUE_LIST,
+  ...DEFAULT_VALUE_PREVIEW,
 ];
 
 const plugins = [
@@ -194,15 +193,17 @@ const withPlugins = [
   withSelectOnBackspace({ allow: [ELEMENT_IMAGE] }),
 ] as const;
 
+export interface RichMDEdProps {
+  value?: string; // set a default value (or DEFAULT_VALUE is unbefined)
+}
+
 export default function RichMDEd(props: RichMDEdProps) {
   const [search, setSearchHighlight] = useState("");
   const decorate = [decorateSearchHighlight({ search })];
 
   ///use driver to select value if available on its local storage
-  const initialValue = useLocalStorageDriver(defaultValue);
-  const [value, setValue] = useState<Node[]>(
-    initialValue
-  );
+  const initialValue = useLocalStorageDriver(DEFAULT_VALUE);
+  const [value, setValue] = useState<Node[]>(initialValue);
   const editor = useMemo(() => pipe(createEditor(), ...withPlugins), []);
 
   const {

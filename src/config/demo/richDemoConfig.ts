@@ -49,7 +49,7 @@ export const options = {
   ...setDefaults(DEFAULTS_SEARCH_HIGHLIGHT, {}),
 };
 
-export const initialValuePreview: SlateDocument = [
+export const DEFAULT_VALUE_PREVIEW: SlateDocument = [
   {
     children: [
       {
@@ -93,7 +93,7 @@ export const initialValuePreview: SlateDocument = [
   },
 ];
 
-export const initialValueBasicMarks: SlateDocument = [
+export const DEFAULT_VALUE_BASIC_MARKS: SlateDocument = [
   {
     children: [
       {
@@ -179,7 +179,7 @@ export const initialValueBasicMarks: SlateDocument = [
   },
 ];
 
-export const initialValueHighlight: SlateDocument = [
+export const DEFAULT_VALUE_HIGHLIGHT: SlateDocument = [
   {
     children: [
       {
@@ -210,7 +210,7 @@ export const initialValueHighlight: SlateDocument = [
   },
 ];
 
-export const initialValueBasicElements: SlateDocument = [
+export const DEFAULT_VALUE_BASIC_ELEMENTS: SlateDocument = [
   {
     children: [
       {
@@ -265,7 +265,7 @@ export const initialValueBasicElements: SlateDocument = [
   },
 ];
 
-export const initialValueList: SlateDocument = [
+export const DEFAULT_VALUE_LIST: SlateDocument = [
   {
     children: [
       {
